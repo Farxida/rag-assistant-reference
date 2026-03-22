@@ -1,12 +1,9 @@
-"""Hybrid retrieval: dense vector search + BM25 fused via Reciprocal Rank Fusion."""
-
 from rank_bm25 import BM25Okapi
 
 from src.ingestion.embedder import search as vector_search, get_collection
 
 _bm25_index = None
 _bm25_docs = None
-
 
 def _build_bm25_index():
     global _bm25_index, _bm25_docs
@@ -26,7 +23,6 @@ def _build_bm25_index():
 
     _bm25_index = BM25Okapi(tokenized)
     return _bm25_index
-
 
 def bm25_search(query: str, top_k: int = 20) -> list[dict]:
     global _bm25_index, _bm25_docs
@@ -49,10 +45,8 @@ def bm25_search(query: str, top_k: int = 20) -> list[dict]:
             })
     return results
 
-
 def hybrid_search(query: str, top_k: int = 5, vector_weight: float = 0.5) -> list[dict]:
-    """Reciprocal Rank Fusion: score(d) = sum(weight_i / (k + rank_i(d)))."""
-    k = 60  # RRF smoothing constant
+    k = 60
 
     vector_results = vector_search(query, top_k=20)
     bm25_results = bm25_search(query, top_k=20)
@@ -73,7 +67,6 @@ def hybrid_search(query: str, top_k: int = 5, vector_weight: float = 0.5) -> lis
         rrf_scores[key]["score"] += bm25_weight / (k + rank + 1)
 
     return sorted(rrf_scores.values(), key=lambda x: x["score"], reverse=True)[:top_k]
-
 
 if __name__ == "__main__":
     queries = [

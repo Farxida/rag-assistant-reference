@@ -1,8 +1,5 @@
-"""End-to-end knowledge base builder: markdown -> chunks -> ChromaDB."""
-
 from src.ingestion.chunker import load_documents, chunk_documents
 from src.ingestion.embedder import create_collection
-
 
 def build(data_dir: str = "data/raw", reset: bool = True) -> None:
     print(f"=== Building knowledge base from {data_dir} ===\n")
@@ -12,7 +9,6 @@ def build(data_dir: str = "data/raw", reset: bool = True) -> None:
     create_collection(chunks, reset=reset)
 
     print("\nDone.")
-
 
 if __name__ == "__main__":
     build()

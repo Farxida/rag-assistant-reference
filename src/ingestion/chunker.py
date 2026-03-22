@@ -1,16 +1,12 @@
-"""Hierarchical markdown chunker for RAG ingestion."""
-
 from pathlib import Path
 from dataclasses import dataclass
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-
 @dataclass
 class Chunk:
     text: str
     metadata: dict
-
 
 def load_documents(data_dir: str) -> list[dict]:
     docs = []
@@ -21,7 +17,6 @@ def load_documents(data_dir: str) -> list[dict]:
         })
     print(f"Loaded {len(docs)} documents from {data_dir}")
     return docs
-
 
 def chunk_documents(
     documents: list[dict],
@@ -50,7 +45,6 @@ def chunk_documents(
     avg = sum(len(c.text) for c in chunks) // max(len(chunks), 1)
     print(f"Created {len(chunks)} chunks (avg size: {avg} chars)")
     return chunks
-
 
 if __name__ == "__main__":
     docs = load_documents("data/raw")

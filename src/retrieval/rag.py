@@ -1,5 +1,3 @@
-"""Full RAG pipeline: question -> hybrid retrieval -> rerank -> Groq LLM."""
-
 import os
 import time
 from dotenv import load_dotenv
@@ -27,12 +25,10 @@ NEVER:
 - Discuss internal company matters
 - Offer discounts not documented in the knowledge base"""
 
-
 def build_context(results: list[dict]) -> str:
     return "\n\n---\n\n".join(
         f"[Source: {r['source']}]\n{r['text']}" for r in results
     )
-
 
 def build_prompt(question: str, context: str) -> str:
     return f"""Context from Northwind Cloud knowledge base:
@@ -44,7 +40,6 @@ def build_prompt(question: str, context: str) -> str:
 Customer question: {question}
 
 Please answer the customer's question based on the context above."""
-
 
 class RAGPipeline:
     def __init__(
@@ -109,7 +104,6 @@ class RAGPipeline:
                 else:
                     raise
         return "Service temporarily busy. Please try again."
-
 
 if __name__ == "__main__":
     rag = RAGPipeline()

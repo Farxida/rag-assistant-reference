@@ -1,14 +1,10 @@
-"""Tests for chunker."""
-
 import tempfile
 from pathlib import Path
 
 from src.ingestion.chunker import load_documents, chunk_documents, Chunk
 
-
 def _write_md(dir_path: Path, name: str, content: str) -> None:
     (dir_path / name).write_text(content)
-
 
 def test_load_documents_reads_all_md():
     with tempfile.TemporaryDirectory() as tmp:
@@ -20,7 +16,6 @@ def test_load_documents_reads_all_md():
         assert len(docs) == 2
         assert {d["source"] for d in docs} == {"a.md", "b.md"}
 
-
 def test_chunk_documents_produces_chunks():
     docs = [{"text": "# Header\n\nFirst paragraph.\n\nSecond paragraph.", "source": "x.md"}]
     chunks = chunk_documents(docs, chunk_size=100, chunk_overlap=10)
@@ -28,13 +23,11 @@ def test_chunk_documents_produces_chunks():
     assert all(isinstance(c, Chunk) for c in chunks)
     assert all(c.metadata["source"] == "x.md" for c in chunks)
 
-
 def test_chunk_overlap_preserves_context():
     long_text = "Sentence one. " * 50
     docs = [{"text": long_text, "source": "long.md"}]
     chunks = chunk_documents(docs, chunk_size=200, chunk_overlap=50)
     assert len(chunks) > 1
-
 
 def test_chunks_have_unique_ids():
     docs = [

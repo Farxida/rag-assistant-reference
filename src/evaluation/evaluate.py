@@ -1,5 +1,3 @@
-"""RAG evaluation pipeline: Recall@5, LLM-as-judge correctness, latency."""
-
 import json
 import os
 import time
@@ -15,7 +13,6 @@ from src.ingestion.embedder import search as vector_search
 
 load_dotenv()
 
-
 @dataclass
 class EvalResult:
     question_id: int
@@ -30,11 +27,9 @@ class EvalResult:
     retrieval_time_ms: float = 0.0
     total_time_ms: float = 0.0
 
-
 def load_test_set(path: str = "data/eval/test_set.json") -> list[dict]:
     with open(path) as f:
         return json.load(f)
-
 
 def evaluate_retrieval(
     test_set: list[dict],
@@ -42,7 +37,6 @@ def evaluate_retrieval(
     use_hybrid: bool = True,
     use_reranker: bool = True,
 ) -> list[EvalResult]:
-    """Retrieval-only eval (fast, no LLM calls)."""
     results = []
     for item in test_set:
         t0 = time.time()
@@ -74,13 +68,11 @@ def evaluate_retrieval(
         ))
     return results
 
-
 def evaluate_full(
     test_set: list[dict],
     rag: RAGPipeline,
     sleep_between: float = 1.0,
 ) -> list[EvalResult]:
-    """Full eval: retrieval + generation. LLM judge runs separately."""
     results = []
     for i, item in enumerate(test_set):
         t0 = time.time()
@@ -110,9 +102,7 @@ def evaluate_full(
 
     return results
 
-
 def judge_correctness(results: list[EvalResult], sleep_between: float = 1.0) -> list[EvalResult]:
-    """LLM-as-judge: scores each answer against ground truth (0.0–1.0)."""
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY required for LLM judge")
@@ -161,7 +151,6 @@ Respond with ONLY a number between 0.0 and 1.0, nothing else."""
 
     return results
 
-
 def aggregate(results: list[EvalResult]) -> dict:
     n = len(results)
     return {
@@ -171,7 +160,6 @@ def aggregate(results: list[EvalResult]) -> dict:
         "avg_retrieval_ms": sum(r.retrieval_time_ms for r in results) / max(n, 1),
         "avg_total_ms": sum(r.total_time_ms for r in results) / max(n, 1) if any(r.total_time_ms for r in results) else 0,
     }
-
 
 def print_report(results: list[EvalResult], title: str = "Evaluation Report"):
     agg = aggregate(results)
@@ -205,7 +193,6 @@ def print_report(results: list[EvalResult], title: str = "Evaluation Report"):
 
     print(f"\n{'=' * 60}\n")
 
-
 def save_report(results: list[EvalResult], path: str = "data/eval/report.json"):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     payload = {
@@ -215,7 +202,6 @@ def save_report(results: list[EvalResult], path: str = "data/eval/report.json"):
     with open(path, "w") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"Report saved: {path}")
-
 
 if __name__ == "__main__":
     import sys

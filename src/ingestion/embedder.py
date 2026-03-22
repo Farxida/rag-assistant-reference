@@ -1,5 +1,3 @@
-"""ChromaDB embedder + vector search via sentence-transformers."""
-
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from pathlib import Path
@@ -12,11 +10,9 @@ EMBEDDING_FN = SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
 CHROMA_PATH = Path("data/chroma_db")
 COLLECTION_NAME = "knowledge_base"
 
-
 def get_client() -> chromadb.PersistentClient:
     CHROMA_PATH.mkdir(parents=True, exist_ok=True)
     return chromadb.PersistentClient(path=str(CHROMA_PATH))
-
 
 def create_collection(chunks: list[Chunk], reset: bool = False) -> chromadb.Collection:
     client = get_client()
@@ -47,11 +43,9 @@ def create_collection(chunks: list[Chunk], reset: bool = False) -> chromadb.Coll
     print(f"Embedding model: {EMBEDDING_MODEL} (384 dim)")
     return collection
 
-
 def get_collection() -> chromadb.Collection:
     client = get_client()
     return client.get_collection(name=COLLECTION_NAME, embedding_function=EMBEDDING_FN)
-
 
 def search(query: str, top_k: int = 5) -> list[dict]:
     collection = get_collection()
@@ -65,7 +59,6 @@ def search(query: str, top_k: int = 5) -> list[dict]:
             "distance": results["distances"][0][i],
         })
     return found
-
 
 if __name__ == "__main__":
     results = search("How much does the Business plan cost?")
