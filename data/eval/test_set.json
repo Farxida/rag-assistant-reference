@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "question": "How much does the Business plan cost per month?",
+    "ground_truth": "299",
+    "expected_source": "pricing.md",
+    "category": "pricing"
+  },
+  {
+    "id": 2,
+    "question": "What is the discount for annual billing?",
+    "ground_truth": "20%",
+    "expected_source": "pricing.md",
+    "category": "pricing"
+  },
+  {
+    "id": 3,
+    "question": "How many users are included in the Free plan?",
+    "ground_truth": "3",
+    "expected_source": "pricing.md",
+    "category": "pricing"
+  },
+  {
+    "id": 4,
+    "question": "Is there a free trial available?",
+    "ground_truth": "yes, 14-day free trial",
+    "expected_source": "pricing.md",
+    "category": "pricing"
+  },
+  {
+    "id": 5,
+    "question": "Which compliance certifications does Northwind have?",
+    "ground_truth": "SOC 2 Type II, ISO 27001, HIPAA, GDPR, CCPA",
+    "expected_source": "security.md",
+    "category": "security"
+  },
+  {
+    "id": 6,
+    "question": "Can I bring my own encryption key?",
+    "ground_truth": "yes, on Enterprise plan via AWS KMS, GCP Cloud KMS, or Azure Key Vault",
+    "expected_source": "security.md",
+    "category": "security"
+  },
+  {
+    "id": 7,
+    "question": "What TLS version is enforced?",
+    "ground_truth": "TLS 1.3",
+    "expected_source": "security.md",
+    "category": "security"
+  },
+  {
+    "id": 8,
+    "question": "Where can I report security vulnerabilities?",
+    "ground_truth": "security@northwind.cloud or HackerOne bug bounty",
+    "expected_source": "security.md",
+    "category": "security"
+  },
+  {
+    "id": 9,
+    "question": "How do I create a workspace?",
+    "ground_truth": "sign up at app.northwind.cloud, verify email, choose name and region",
+    "expected_source": "getting_started.md",
+    "category": "getting_started"
+  },
+  {
+    "id": 10,
+    "question": "How long does an initial sync usually take?",
+    "ground_truth": "2 to 4 hours for 100 GB warehouse",
+    "expected_source": "faq.md",
+    "category": "technical"
+  },
+  {
+    "id": 11,
+    "question": "What is the API rate limit on the Business plan?",
+    "ground_truth": "600 requests per minute",
+    "expected_source": "api_reference.md",
+    "category": "api"
+  },
+  {
+    "id": 12,
+    "question": "How do I authenticate API requests?",
+    "ground_truth": "Bearer token in Authorization header, API key from Settings",
+    "expected_source": "api_reference.md",
+    "category": "api"
+  },
+  {
+    "id": 13,
+    "question": "What is the API base URL?",
+    "ground_truth": "https://api.northwind.cloud/v1",
+    "expected_source": "api_reference.md",
+    "category": "api"
+  },
+  {
+    "id": 14,
+    "question": "Which Python SDK does Northwind provide?",
+    "ground_truth": "pip install northwind-cloud",
+    "expected_source": "api_reference.md",
+    "category": "api"
+  },
+  {
+    "id": 15,
+    "question": "Does Northwind support Snowflake?",
+    "ground_truth": "yes, native connector available",
+    "expected_source": "integrations.md",
+    "category": "integrations"
+  },
+  {
+    "id": 16,
+    "question": "Which CRMs are supported?",
+    "ground_truth": "Salesforce, HubSpot, Pipedrive, Zoho",
+    "expected_source": "integrations.md",
+    "category": "integrations"
+  },
+  {
+    "id": 17,
+    "question": "Can I send dashboard reports to Slack?",
+    "ground_truth": "yes, scheduled reports and alerts to Slack",
+    "expected_source": "integrations.md",
+    "category": "integrations"
+  },
+  {
+    "id": 18,
+    "question": "What payment methods do you accept?",
+    "ground_truth": "credit card, ACH (US), SEPA (EU), wire transfer (Enterprise), purchase orders (Enterprise)",
+    "expected_source": "billing.md",
+    "category": "billing"
+  },
+  {
+    "id": 19,
+    "question": "Do you accept cryptocurrency?",
+    "ground_truth": "no",
+    "expected_source": "billing.md",
+    "category": "billing"
+  },
+  {
+    "id": 20,
+    "question": "What happens if my payment fails?",
+    "ground_truth": "retried on day 3, 5, 7; suspended after 3 failed retries; archived after 14 days",
+    "expected_source": "billing.md",
+    "category": "billing"
+  },
+  {
+    "id": 21,
+    "question": "Can I get a refund on annual plans?",
+    "ground_truth": "pro-rated refund within first 30 days only",
+    "expected_source": "billing.md",
+    "category": "billing"
+  },
+  {
+    "id": 22,
+    "question": "Why am I getting a connection timeout error?",
+    "ground_truth": "check Northwind IP ranges in firewall, database accepts external connections",
+    "expected_source": "troubleshooting.md",
+    "category": "troubleshooting"
+  },
+  {
+    "id": 23,
+    "question": "How can I make a slow dashboard faster?",
+    "ground_truth": "enable Auto-cache, replace SELECT * with explicit columns, check Performance tab",
+    "expected_source": "troubleshooting.md",
+    "category": "troubleshooting"
+  },
+  {
+    "id": 24,
+    "question": "What is the uptime SLA on Enterprise?",
+    "ground_truth": "99.95%",
+    "expected_source": "regions_and_sla.md",
+    "category": "sla"
+  },
+  {
+    "id": 25,
+    "question": "Which regions does Northwind support?",
+    "ground_truth": "us-east-1, us-west-2, eu-west-1, eu-central-1, ap-southeast-1",
+    "expected_source": "regions_and_sla.md",
+    "category": "sla"
+  },
+  {
+    "id": 26,
+    "question": "Can I move my workspace to a different region?",
+    "ground_truth": "no, region cannot be changed after creation",
+    "expected_source": "regions_and_sla.md",
+    "category": "sla"
+  },
+  {
+    "id": 27,
+    "question": "Do you train AI models on customer data?",
+    "ground_truth": "no, customer data is never used to train shared models",
+    "expected_source": "policies.md",
+    "category": "policy"
+  },
+  {
+    "id": 28,
+    "question": "How long are audit logs retained?",
+    "ground_truth": "12 months on Business, 7 years on Enterprise",
+    "expected_source": "policies.md",
+    "category": "policy"
+  },
+  {
+    "id": 29,
+    "question": "Can I import dashboards from Tableau?",
+    "ground_truth": "yes, via nw-tableau-importer CLI for .twbx files",
+    "expected_source": "migration_guide.md",
+    "category": "migration"
+  },
+  {
+    "id": 30,
+    "question": "What is the maximum file upload size on Business plan?",
+    "ground_truth": "10 GB",
+    "expected_source": "limits_and_quotas.md",
+    "category": "limits"
+  }
+]

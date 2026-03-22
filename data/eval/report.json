@@ -1,0 +1,541 @@
+{
+  "metrics": {
+    "total": 30,
+    "recall_at_5": 0.9666666666666667,
+    "correctness": 0.9333333333333331,
+    "avg_retrieval_ms": 0.0,
+    "avg_total_ms": 1117.393708229065
+  },
+  "details": [
+    {
+      "question_id": 1,
+      "question": "How much does the Business plan cost per month?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "pricing.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "The Business plan costs $299/month per workspace.",
+      "ground_truth": "299",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 7582.756996154785
+    },
+    {
+      "question_id": 2,
+      "question": "What is the discount for annual billing?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "billing.md",
+        "faq.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "The discount for annual billing is 20%. This discount is applied when you pay upfront for the entire year, and it's available on all plans.",
+      "ground_truth": "20%",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 447.47400283813477
+    },
+    {
+      "question_id": 3,
+      "question": "How many users are included in the Free plan?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "getting_started.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "The Free plan includes up to 3 users.",
+      "ground_truth": "3",
+      "correctness": 0.7,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 294.7559356689453
+    },
+    {
+      "question_id": 4,
+      "question": "Is there a free trial available?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "limits_and_quotas.md",
+        "pricing.md",
+        "getting_started.md",
+        "faq.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "Yes, all paid plans include a 14-day free trial. No credit card is required to start, and trial usage is not metered against plan limits.",
+      "ground_truth": "yes, 14-day free trial",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 367.48814582824707
+    },
+    {
+      "question_id": 5,
+      "question": "Which compliance certifications does Northwind have?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "regions_and_sla.md",
+        "policies.md",
+        "features.md",
+        "onboarding.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "Northwind Cloud has the following compliance certifications: \n\n- SOC 2 Type II\n- ISO/IEC 27001:2022\n- HIPAA (available on Enterprise plan)\n- GDPR and UK GDPR\n- CCPA / CPRA (for California residents)",
+      "ground_truth": "SOC 2 Type II, ISO 27001, HIPAA, GDPR, CCPA",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 482.9902648925781
+    },
+    {
+      "question_id": 6,
+      "question": "Can I bring my own encryption key?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "api_reference.md",
+        "security.md",
+        "policies.md",
+        "faq.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "Yes, you can bring your own encryption key, but only on the Enterprise plan, via AWS KMS, GCP Cloud KMS, or Azure Key Vault.",
+      "ground_truth": "yes, on Enterprise plan via AWS KMS, GCP Cloud KMS, or Azure Key Vault",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 387.39895820617676
+    },
+    {
+      "question_id": 7,
+      "question": "What TLS version is enforced?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "policies.md",
+        "integrations.md",
+        "troubleshooting.md",
+        "features.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "According to our security policies, TLS 1.3 is enforced on all API and web traffic, and older TLS versions are rejected at the load balancer. However, we also support a minimum of TLS 1.2 for certain connections.",
+      "ground_truth": "TLS 1.3",
+      "correctness": 0.7,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 430.7069778442383
+    },
+    {
+      "question_id": 8,
+      "question": "Where can I report security vulnerabilities?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "faq.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "You can report security vulnerabilities to security@northwind.cloud. We also operate a public bug bounty program via HackerOne.",
+      "ground_truth": "security@northwind.cloud or HackerOne bug bounty",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 352.1590232849121
+    },
+    {
+      "question_id": 9,
+      "question": "How do I create a workspace?",
+      "category": "getting_started",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "onboarding.md",
+        "regions_and_sla.md",
+        "getting_started.md",
+        "features.md"
+      ],
+      "expected_source": "getting_started.md",
+      "answer": "To create a workspace, follow these steps: \n\n1. Sign up at app.northwind.cloud with your work email.\n2. Verify your email via the link sent to your inbox.\n3. Choose a workspace name and region (note that the region cannot be changed after creation).\n4. Invite teammates by email (optional, can be done later).\n\nThis process should take about 15 minutes, as outlined in our Getting Started guide.",
+      "ground_truth": "sign up at app.northwind.cloud, verify email, choose name and region",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 447.91722297668457
+    },
+    {
+      "question_id": 10,
+      "question": "How long does an initial sync usually take?",
+      "category": "technical",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "limits_and_quotas.md",
+        "getting_started.md",
+        "faq.md"
+      ],
+      "expected_source": "faq.md",
+      "answer": "The initial sync time depends on the data volume. For a 100 GB warehouse, it typically takes 2-4 hours. Subsequent incremental syncs are generally much faster, running in 1-15 minutes.",
+      "ground_truth": "2 to 4 hours for 100 GB warehouse",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 400.76398849487305
+    },
+    {
+      "question_id": 11,
+      "question": "What is the API rate limit on the Business plan?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "api_reference.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "The API rate limit for the Business plan is 600 requests per minute per key, with a burst limit of 1200 requests per key. Additionally, there's a limit of 6000 requests per minute per IP. If you exceed this limit, you'll receive an HTTP 429 response with a `Retry-After` header.",
+      "ground_truth": "600 requests per minute",
+      "correctness": 0.7,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 594.6478843688965
+    },
+    {
+      "question_id": 12,
+      "question": "How do I authenticate API requests?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "api_reference.md",
+        "security.md",
+        "troubleshooting.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "To authenticate API requests, you need to include a Bearer token in the Authorization header. The token should be in the format: `Authorization: Bearer nw_live_<your_api_key>`. You can create and manage API keys in **Settings → API keys**, where you can also configure scopes and expiry dates for each key.",
+      "ground_truth": "Bearer token in Authorization header, API key from Settings",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 478.5420894622803
+    },
+    {
+      "question_id": 13,
+      "question": "What is the API base URL?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "api_reference.md",
+        "security.md",
+        "troubleshooting.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "The API base URL for Northwind Cloud is `https://api.northwind.cloud/v1`.",
+      "ground_truth": "https://api.northwind.cloud/v1",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 330.4290771484375
+    },
+    {
+      "question_id": 14,
+      "question": "Which Python SDK does Northwind provide?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "api_reference.md",
+        "integrations.md",
+        "features.md",
+        "faq.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "The Northwind Cloud Python SDK can be installed using `pip install northwind-cloud`.",
+      "ground_truth": "pip install northwind-cloud",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 341.6318893432617
+    },
+    {
+      "question_id": 15,
+      "question": "Does Northwind support Snowflake?",
+      "category": "integrations",
+      "source_recall": 0.0,
+      "retrieved_sources": [
+        "migration_guide.md",
+        "faq.md",
+        "getting_started.md",
+        "features.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "Yes, Northwind Cloud supports Snowflake. You can select Snowflake as your data source when connecting a new data source in the \"Data → Connections → Add new\" section.",
+      "ground_truth": "yes, native connector available",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 486.6330623626709
+    },
+    {
+      "question_id": 16,
+      "question": "Which CRMs are supported?",
+      "category": "integrations",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "integrations.md",
+        "getting_started.md",
+        "features.md",
+        "faq.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "We support the following CRMs: Salesforce, HubSpot, Pipedrive, and Zoho. You can find more information about our integrations in the knowledge base under \"SaaS applications\".",
+      "ground_truth": "Salesforce, HubSpot, Pipedrive, Zoho",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 402.2989273071289
+    },
+    {
+      "question_id": 17,
+      "question": "Can I send dashboard reports to Slack?",
+      "category": "integrations",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "integrations.md",
+        "getting_started.md",
+        "features.md",
+        "troubleshooting.md",
+        "onboarding.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "Yes, you can send dashboard reports to Slack. According to our features and integrations, Northwind Cloud supports sending scheduled reports to Slack channels. You can set this up by following the steps in \"Step 4 — Set up scheduled reports\" in our getting started guide.",
+      "ground_truth": "yes, scheduled reports and alerts to Slack",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 541.2280559539795
+    },
+    {
+      "question_id": 18,
+      "question": "What payment methods do you accept?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "faq.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "We accept the following payment methods: \n\n* Credit card (Visa, Mastercard, Amex, Discover)\n* ACH direct debit (US customers)\n* SEPA direct debit (EU customers on Business and above plans)\n* Wire transfer (Enterprise plans with a $5K minimum invoice)\n* Purchase orders (Enterprise plans on approved credit)\n\nNote that we do not accept cryptocurrency, PayPal, or international money orders.",
+      "ground_truth": "credit card, ACH (US), SEPA (EU), wire transfer (Enterprise), purchase orders (Enterprise)",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 511.8563175201416
+    },
+    {
+      "question_id": 19,
+      "question": "Do you accept cryptocurrency?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "policies.md",
+        "faq.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "No, we do not accept cryptocurrency as a payment method. This is stated in our billing policy, which lists our accepted payment methods and specifically excludes cryptocurrency.",
+      "ground_truth": "no",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 388.69714736938477
+    },
+    {
+      "question_id": 20,
+      "question": "What happens if my payment fails?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "troubleshooting.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "If your payment fails, we will retry the charge on day 3, 5, and 7 after the initial failure. If all retries fail, your workspace access will be suspended after 3 failed retries, and you'll have 14 days to update your payment method before your data is archived. To restore service, you can update your payment method in billing settings and contact support@northwind.cloud if needed.",
+      "ground_truth": "retried on day 3, 5, 7; suspended after 3 failed retries; archived after 14 days",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 535.1338386535645
+    },
+    {
+      "question_id": 21,
+      "question": "Can I get a refund on annual plans?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "faq.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "For annual plans, a pro-rated refund is available, but only within the first 30 days of your subscription. After that, no refunds are available.",
+      "ground_truth": "pro-rated refund within first 30 days only",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 419.40999031066895
+    },
+    {
+      "question_id": 22,
+      "question": "Why am I getting a connection timeout error?",
+      "category": "troubleshooting",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "getting_started.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "troubleshooting.md",
+      "answer": "To resolve the connection timeout error, please verify that Northwind IP ranges are allowed in your firewall, which can be found in **Settings → Network**. Also, ensure that your database accepts external connections, as this is often disabled by default in cloud providers. If you're using VPC peering, confirm that the peering connection is in an `active` state. If issues persist, feel free to reach out to support@northwind.cloud for further assistance.",
+      "ground_truth": "check Northwind IP ranges in firewall, database accepts external connections",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 607.7308654785156
+    },
+    {
+      "question_id": 23,
+      "question": "How can I make a slow dashboard faster?",
+      "category": "troubleshooting",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "migration_guide.md",
+        "getting_started.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "troubleshooting.md",
+      "answer": "To improve a slow dashboard's performance, try the following: \n1. Check **Dashboard → Performance** to identify which charts are taking the longest to load.\n2. Enable **Auto-cache** on the dashboard to cache results for up to 24 hours.\n3. Optimize the underlying queries by replacing SELECT * with explicit column lists. \n\nIf you need further assistance, feel free to contact support@northwind.cloud.",
+      "ground_truth": "enable Auto-cache, replace SELECT * with explicit columns, check Performance tab",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 526.5898704528809
+    },
+    {
+      "question_id": 24,
+      "question": "What is the uptime SLA on Enterprise?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "onboarding.md",
+        "regions_and_sla.md",
+        "policies.md",
+        "pricing.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "The uptime SLA for the Enterprise plan is 99.95% monthly, which translates to a maximum of 22 minutes of downtime per month.",
+      "ground_truth": "99.95%",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 1569.8649883270264
+    },
+    {
+      "question_id": 25,
+      "question": "Which regions does Northwind support?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "migration_guide.md",
+        "features.md",
+        "integrations.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "Northwind Cloud is available in five geographic regions: \n\n1. us-east-1 (Virginia, USA)\n2. us-west-2 (Oregon, USA)\n3. eu-west-1 (Ireland)\n4. eu-central-1 (Frankfurt)\n5. ap-southeast-1 (Singapore)\n\nThese regions offer varying compliance and data residency options.",
+      "ground_truth": "us-east-1, us-west-2, eu-west-1, eu-central-1, ap-southeast-1",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 2161.9629859924316
+    },
+    {
+      "question_id": 26,
+      "question": "Can I move my workspace to a different region?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "getting_started.md",
+        "security.md",
+        "faq.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "No, the region cannot be changed after workspace creation. If you need to move your data to a different region, you'll need to create a new workspace and re-sync your data.",
+      "ground_truth": "no, region cannot be changed after creation",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 1571.531057357788
+    },
+    {
+      "question_id": 27,
+      "question": "Do you train AI models on customer data?",
+      "category": "policy",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "policies.md",
+        "security.md",
+        "features.md",
+        "faq.md"
+      ],
+      "expected_source": "policies.md",
+      "answer": "No, we never use customer data to train shared AI models. This is stated in both our Data and Security FAQ and our AI Usage Policy. Per-customer fine-tuning is available on the Enterprise plan, but only with explicit opt-in.",
+      "ground_truth": "no, customer data is never used to train shared models",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 4655.1008224487305
+    },
+    {
+      "question_id": 28,
+      "question": "How long are audit logs retained?",
+      "category": "policy",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "limits_and_quotas.md",
+        "policies.md",
+        "troubleshooting.md",
+        "onboarding.md",
+        "pricing.md"
+      ],
+      "expected_source": "policies.md",
+      "answer": "The retention period for audit logs depends on your plan. On the Business plan, audit logs are retained for 12 months, while on the Enterprise plan, they are retained for 7 years.",
+      "ground_truth": "12 months on Business, 7 years on Enterprise",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 1695.1191425323486
+    },
+    {
+      "question_id": 29,
+      "question": "Can I import dashboards from Tableau?",
+      "category": "migration",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "migration_guide.md",
+        "faq.md"
+      ],
+      "expected_source": "migration_guide.md",
+      "answer": "Yes, you can import dashboards from Tableau into Northwind Cloud. The `nw-tableau-importer` CLI tool can be used to bulk-import .twbx files. However, please note that some features like sets, bins, and table calculations may require manual rework. It's recommended to review the imported dashboards manually to ensure everything is working as expected. You can find the `nw-tableau-importer` tool on github.com/northwind/migration-tools.",
+      "ground_truth": "yes, via nw-tableau-importer CLI for .twbx files",
+      "correctness": 0.9,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 2017.1177387237549
+    },
+    {
+      "question_id": 30,
+      "question": "What is the maximum file upload size on Business plan?",
+      "category": "limits",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "faq.md",
+        "getting_started.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "limits_and_quotas.md",
+      "answer": "The maximum single file upload size on the Business plan is 10 GB. You can upload files up to this size using the **Data → Upload** feature and drag-and-drop.",
+      "ground_truth": "10 GB",
+      "correctness": 1.0,
+      "retrieval_time_ms": 0.0,
+      "total_time_ms": 2491.8739795684814
+    }
+  ]
+}
