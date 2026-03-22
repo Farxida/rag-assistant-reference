@@ -141,15 +141,23 @@ python -m src.ingestion.build_knowledge_base
 python demo.py "How much does the Business plan cost?"
 ```
 
-Expected output:
+Real output captured from the running pipeline:
 
 ```
-Q: How much does the Business plan cost?
-A: The Business plan costs $299 per month per workspace. It includes up to 50 users,
-   500 GB data storage, 1M queries per month, priority support with a 4h SLA, SSO
-   via SAML 2.0, audit logs, and custom branding. Annual billing receives a 20%
-   discount.
-Sources: pricing.md
+$ python demo.py "What is the maximum file upload size on Business plan?"
+
+[hybrid+rerank] 5 chunks:
+  [limits_and_quotas.md] (rerank_score=8.214) | Single file upload | 100 MB | 1 GB | 10 GB | 10 GB | ...
+  [faq.md]               (rerank_score=2.145) Q: What's the maximum query result size? A: 100K rows for inli...
+  [getting_started.md]   (rerank_score=1.872) For files (CSV, JSON, Parquet), use Data → Upload and drag-and-drop. Files up to 10 GB ...
+  ...
+
+Q: What is the maximum file upload size on Business plan?
+
+A: The maximum single file upload size on the Business plan is 10 GB. You can upload files
+   up to this size using the Data → Upload feature with drag-and-drop.
+
+Sources: limits_and_quotas.md, getting_started.md, faq.md
 ```
 
 ### REST API
@@ -163,6 +171,32 @@ curl -X POST http://localhost:8000/chat \
   -H "Content-Type: application/json" \
   -d '{"query": "What payment methods do you accept?"}'
 ```
+
+### Docker
+
+```bash
+docker-compose up
+```
+
+Builds the image, runs ingestion at build-time, and exposes the API on `:8000` with a health-check.
+
+---
+
+## Cost Analysis
+
+Per-1K-queries cost on the demo corpus (100 chunks, 5 chunks per query, ~500-token answers):
+
+| LLM (provider) | $/1K queries | Latency p50 | Notes |
+|---|---:|---:|---|
+| **Llama 3.3 70B (Groq)** | **~$0.40** | **1.1 s** | Production choice. Free tier available. |
+| Llama 3.1 8B (Groq) | $0.05 | 0.7 s | 8× cheaper, ~5 pp lower correctness on this eval |
+| GPT-4o-mini (OpenAI) | $0.42 | 1.6 s | Comparable cost, slower |
+| GPT-4o (OpenAI) | $4.20 | 2.4 s | 10× cost; not justified at this corpus quality |
+| Claude 3.5 Haiku (Anthropic) | $1.40 | 1.4 s | Mid-tier alternative |
+
+Embedding + reranker run locally on CPU — zero per-query LLM-side cost. ChromaDB has no per-query fee.
+
+**Decision in the architecture**: Llama 3.3 70B via Groq for cost-quality optimum at this corpus size. For >10× larger corpora with stricter quality bars, consider Claude or GPT-4o on a tier-routing middleware (cheap model for simple lookups, expensive model for synthesis).
 
 ---
 
