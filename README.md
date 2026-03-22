@@ -1,12 +1,10 @@
-# RAG Assistant — Reference Implementation
+# RAG Customer Support Assistant
 
 ![Tests](https://github.com/Farxida/rag-assistant-reference/actions/workflows/tests.yml/badge.svg)
 ![Python 3.11](https://img.shields.io/badge/python-3.11-blue)
 ![License MIT](https://img.shields.io/badge/license-MIT-green)
 
-> Production-grade Retrieval-Augmented Generation system for customer support over a domain knowledge base. Hybrid retrieval, cross-encoder reranking, LangGraph agent, and a measured evaluation pipeline — applied here to a synthetic SaaS documentation corpus.
-
-> **Origin.** This repository implements the same architecture I built for a commercial RAG assistant under NDA (currently paused by the client). All code, prompts, and the corpus in this repository are original; no client material is reproduced.
+> Retrieval-Augmented Generation system for customer support over a domain knowledge base. Hybrid retrieval (BM25 + dense embeddings), cross-encoder reranking, and an evaluation pipeline with LLM-as-judge. Built and measured on a SaaS documentation corpus (Northwind Cloud — fictional company for reproducibility).
 
 ---
 
@@ -210,30 +208,6 @@ Reports are written to `data/eval/report.json` (full eval) or `data/eval/ablatio
 ├── tests/                           # 12 unit tests
 └── assets/                          # generated charts for this README
 ```
-
----
-
-## What's Different from a Tutorial
-
-This implementation is engineered as a reference for production deployments, not as a notebook walkthrough:
-
-- **Modular**: every component (chunker, embedder, hybrid, reranker, generator) is independently testable and swappable.
-- **Hybrid + reranker stack**: most tutorials stop at vector search. This stack matches what works in production.
-- **Measured ablations**: explicit cost/quality trade-offs, not "try everything and pick whatever sounds good".
-- **LLM-as-judge eval**: scales human-quality evaluation to dozens of questions without manual review.
-- **API + CLI + tests**: deployable, not just runnable in a notebook.
-
----
-
-## Known Limitations and Trade-offs
-
-This reference implementation is deliberately scoped to be reproducible and testable. The following were intentionally left out:
-
-- **Streaming responses** — the API returns the full answer; SSE/WebSocket streaming was in the production version, not here.
-- **Multi-turn conversation memory** — each query is stateless. Production used a session store with message-history truncation.
-- **Observability** — no Langfuse/LangSmith integration in this repo. Production used Langfuse for trace inspection.
-- **Auto-reindexing** — the knowledge base is built once and not re-synced. Production used a cron job + change detection.
-- **Multi-tenant isolation** — single workspace. Production used per-tenant ChromaDB collections + row-level access control.
 
 ---
 
