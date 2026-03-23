@@ -79,26 +79,6 @@ flowchart TB
 
 ---
 
-## Pipeline
-
-The system runs as two phases:
-
-**Ingestion (offline, ~15 sec for the demo corpus):**
-
-1. Load markdown documents from `data/raw/`
-2. Hierarchical chunking (chunk size 512, overlap 50) — splits on headers first, then paragraphs, sentences, words
-3. Embed each chunk with `all-MiniLM-L6-v2` (384 dimensions)
-4. Persist embeddings + metadata in ChromaDB
-
-**Query (online, ~1.1 sec end-to-end):**
-
-1. **Hybrid retrieval** — dense vector search + BM25 in parallel, fused via Reciprocal Rank Fusion (`score(d) = Σ weight_i / (k + rank_i(d))`, `k=60`). Top-20 candidates.
-2. **Cross-encoder reranking** — re-scores each (query, chunk) pair with a fine-tuned cross-encoder. Selects top-5.
-3. **Generation** — Llama 3.3 70B receives the question + retrieved context and produces the answer with citations.
-4. **Output** — answer text + list of source documents.
-
----
-
 ## Evaluation Methodology
 
 **Test set:** 30 questions across 12 categories (`api`, `billing`, `pricing`, `security`, `sla`, `integrations`, `migration`, `policy`, `getting_started`, `limits`, `technical`, `troubleshooting`). Each question has a ground-truth answer and an expected source document.
@@ -141,25 +121,6 @@ python -m src.ingestion.build_knowledge_base
 python demo.py "How much does the Business plan cost?"
 ```
 
-Real output captured from the running pipeline:
-
-```
-$ python demo.py "What is the maximum file upload size on Business plan?"
-
-[hybrid+rerank] 5 chunks:
-  [limits_and_quotas.md] (rerank_score=8.214) | Single file upload | 100 MB | 1 GB | 10 GB | 10 GB | ...
-  [faq.md]               (rerank_score=2.145) Q: What's the maximum query result size? A: 100K rows for inli...
-  [getting_started.md]   (rerank_score=1.872) For files (CSV, JSON, Parquet), use Data → Upload and drag-and-drop. Files up to 10 GB ...
-  ...
-
-Q: What is the maximum file upload size on Business plan?
-
-A: The maximum single file upload size on the Business plan is 10 GB. You can upload files
-   up to this size using the Data → Upload feature with drag-and-drop.
-
-Sources: limits_and_quotas.md, getting_started.md, faq.md
-```
-
 ### REST API
 
 ```bash
@@ -182,44 +143,8 @@ Builds the image, runs ingestion at build-time, and exposes the API on `:8000` w
 
 ---
 
-## Cost Analysis
-
-Per-1K-queries cost assuming ~1500 input + 500 output tokens (5 chunks of context per query, ~500-token answers). Public pricing sources: [Groq](https://groq.com/pricing/), [OpenAI](https://openai.com/api/pricing/), [Anthropic](https://www.anthropic.com/pricing).
-
-| LLM (provider) | Input $/1M | Output $/1M | $/1K queries | Notes |
-|---|---:|---:|---:|---|
-| Llama 3.1 8B (Groq) | $0.05 | $0.08 | **$0.12** | Cheapest tier, lower quality on synthesis |
-| GPT-4o-mini (OpenAI) | $0.15 | $0.60 | **$0.53** | Quality/cost optimum for many use cases |
-| **Llama 3.3 70B (Groq)** | $0.59 | $0.79 | **$1.29** | **Production choice — fastest provider** |
-| Claude 3.5 Haiku (Anthropic) | $0.80 | $4.00 | $3.20 | Mid-tier; better instruction-following |
-| GPT-4o (OpenAI) | $2.50 | $10.00 | $8.75 | Premium; 7× cost vs Llama 70B |
-
-Embedding + reranker run locally on CPU — zero per-query LLM-side cost. ChromaDB has no per-query fee.
-
-**Architectural choice: Llama 3.3 70B on Groq** — Groq's hardware delivers ~3× lower latency than typical inference (sub-second for most queries on this corpus) at a competitive price. Quality lag vs GPT-4o is small for retrieval-grounded answers but the 7× cost gap matters at scale.
-
-For >10× larger corpora with stricter quality bars, route via tier middleware: cheap model (Llama 8B / GPT-4o-mini) for simple factual lookups, premium model (Claude / GPT-4o) only for multi-document synthesis. Routing is a separate concern, not implemented here.
-
----
-
-## Reproduce the Evaluation
-
-```bash
-# Retrieval-only eval (fast, no LLM calls — ~30 sec)
-python -m src.evaluation.evaluate retrieval
-
-# Ablation across 3 retrieval configurations
-python -m src.evaluation.evaluate ablation
-
-# Full eval (retrieval + generation + LLM judge — ~2 min)
-python -m src.evaluation.evaluate full
-```
-
-Reports are written to `data/eval/report.json` (full eval) or `data/eval/ablation.json`.
-
----
-
-## Project Structure
+<details>
+<summary><b>Project Structure</b></summary>
 
 ```
 .
@@ -241,11 +166,13 @@ Reports are written to `data/eval/report.json` (full eval) or `data/eval/ablatio
 │   │   └── evaluate.py              # retrieval / ablation / full eval modes
 │   └── api/
 │       └── main.py                  # FastAPI service
+├── notebooks/
+│   └── 01_retrieval_walkthrough.ipynb  # walk-through of vector / BM25 / hybrid / rerank
 ├── tests/                           # 12 unit tests
 └── assets/                          # generated charts for this README
 ```
 
----
+</details>
 
 ## License
 
