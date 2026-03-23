@@ -184,19 +184,21 @@ Builds the image, runs ingestion at build-time, and exposes the API on `:8000` w
 
 ## Cost Analysis
 
-Per-1K-queries cost on the demo corpus (100 chunks, 5 chunks per query, ~500-token answers):
+Per-1K-queries cost assuming ~1500 input + 500 output tokens (5 chunks of context per query, ~500-token answers). Public pricing sources: [Groq](https://groq.com/pricing/), [OpenAI](https://openai.com/api/pricing/), [Anthropic](https://www.anthropic.com/pricing).
 
-| LLM (provider) | $/1K queries | Latency p50 | Notes |
-|---|---:|---:|---|
-| **Llama 3.3 70B (Groq)** | **~$0.40** | **1.1 s** | Production choice. Free tier available. |
-| Llama 3.1 8B (Groq) | $0.05 | 0.7 s | 8× cheaper, ~5 pp lower correctness on this eval |
-| GPT-4o-mini (OpenAI) | $0.42 | 1.6 s | Comparable cost, slower |
-| GPT-4o (OpenAI) | $4.20 | 2.4 s | 10× cost; not justified at this corpus quality |
-| Claude 3.5 Haiku (Anthropic) | $1.40 | 1.4 s | Mid-tier alternative |
+| LLM (provider) | Input $/1M | Output $/1M | $/1K queries | Notes |
+|---|---:|---:|---:|---|
+| Llama 3.1 8B (Groq) | $0.05 | $0.08 | **$0.12** | Cheapest tier, lower quality on synthesis |
+| GPT-4o-mini (OpenAI) | $0.15 | $0.60 | **$0.53** | Quality/cost optimum for many use cases |
+| **Llama 3.3 70B (Groq)** | $0.59 | $0.79 | **$1.29** | **Production choice — fastest provider** |
+| Claude 3.5 Haiku (Anthropic) | $0.80 | $4.00 | $3.20 | Mid-tier; better instruction-following |
+| GPT-4o (OpenAI) | $2.50 | $10.00 | $8.75 | Premium; 7× cost vs Llama 70B |
 
 Embedding + reranker run locally on CPU — zero per-query LLM-side cost. ChromaDB has no per-query fee.
 
-**Decision in the architecture**: Llama 3.3 70B via Groq for cost-quality optimum at this corpus size. For >10× larger corpora with stricter quality bars, consider Claude or GPT-4o on a tier-routing middleware (cheap model for simple lookups, expensive model for synthesis).
+**Architectural choice: Llama 3.3 70B on Groq** — Groq's hardware delivers ~3× lower latency than typical inference (sub-second for most queries on this corpus) at a competitive price. Quality lag vs GPT-4o is small for retrieval-grounded answers but the 7× cost gap matters at scale.
+
+For >10× larger corpora with stricter quality bars, route via tier middleware: cheap model (Llama 8B / GPT-4o-mini) for simple factual lookups, premium model (Claude / GPT-4o) only for multi-document synthesis. Routing is a separate concern, not implemented here.
 
 ---
 
