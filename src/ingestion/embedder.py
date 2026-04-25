@@ -2,6 +2,7 @@ import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from pathlib import Path
 
+from src.auth.context import UserContext, anonymous_context
 from src.ingestion.chunker import Chunk
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
@@ -47,16 +48,36 @@ def get_collection() -> chromadb.Collection:
     client = get_client()
     return client.get_collection(name=COLLECTION_NAME, embedding_function=EMBEDDING_FN)
 
-def search(query: str, top_k: int = 5) -> list[dict]:
+def _build_where(ctx: UserContext) -> dict:
+    return {
+        "$and": [
+            {"tenant_id": ctx.tenant_id},
+            {"classification": {"$in": ctx.allowed_classifications()}},
+        ]
+    }
+
+
+def search(query: str, top_k: int = 5, user_ctx: UserContext | None = None) -> list[dict]:
+    ctx = user_ctx or anonymous_context()
     collection = get_collection()
-    results = collection.query(query_texts=[query], n_results=top_k)
+    results = collection.query(
+        query_texts=[query],
+        n_results=top_k,
+        where=_build_where(ctx),
+    )
+
+    if not results["documents"] or not results["documents"][0]:
+        return []
 
     found = []
     for i in range(len(results["documents"][0])):
+        meta = results["metadatas"][0][i]
         found.append({
             "text": results["documents"][0][i],
-            "source": results["metadatas"][0][i]["source"],
+            "source": meta["source"],
             "distance": results["distances"][0][i],
+            "tenant_id": meta.get("tenant_id"),
+            "classification": meta.get("classification"),
         })
     return found
 

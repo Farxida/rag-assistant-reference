@@ -1,5 +1,6 @@
 from rank_bm25 import BM25Okapi
 
+from src.auth.context import UserContext, anonymous_context
 from src.ingestion.embedder import search as vector_search, get_collection
 
 _bm25_index = None
@@ -14,42 +15,58 @@ def _build_bm25_index():
     _bm25_docs = []
     tokenized = []
     for i, doc in enumerate(all_data["documents"]):
+        meta = all_data["metadatas"][i]
         _bm25_docs.append({
             "text": doc,
-            "source": all_data["metadatas"][i]["source"],
-            "chunk_id": all_data["metadatas"][i]["chunk_id"],
+            "source": meta["source"],
+            "chunk_id": meta["chunk_id"],
+            "tenant_id": meta.get("tenant_id", "northwind-public"),
+            "classification": meta.get("classification", "public"),
         })
         tokenized.append(doc.lower().split())
 
     _bm25_index = BM25Okapi(tokenized)
     return _bm25_index
 
-def bm25_search(query: str, top_k: int = 20) -> list[dict]:
+def bm25_search(query: str, top_k: int = 20, user_ctx: UserContext | None = None) -> list[dict]:
     global _bm25_index, _bm25_docs
 
     if _bm25_index is None:
         _build_bm25_index()
 
+    ctx = user_ctx or anonymous_context()
     tokenized_query = query.lower().split()
     scores = _bm25_index.get_scores(tokenized_query)
 
-    ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)[:top_k]
+    ranked = sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
 
     results = []
     for idx, score in ranked:
-        if score > 0:
-            results.append({
-                "text": _bm25_docs[idx]["text"],
-                "source": _bm25_docs[idx]["source"],
-                "bm25_score": float(score),
-            })
+        if score <= 0:
+            break
+        doc = _bm25_docs[idx]
+        if not ctx.can_see(doc["tenant_id"], doc["classification"]):
+            continue
+        results.append({
+            "text": doc["text"],
+            "source": doc["source"],
+            "bm25_score": float(score),
+        })
+        if len(results) >= top_k:
+            break
     return results
 
-def hybrid_search(query: str, top_k: int = 5, vector_weight: float = 0.5) -> list[dict]:
+def hybrid_search(
+    query: str,
+    top_k: int = 5,
+    vector_weight: float = 0.5,
+    user_ctx: UserContext | None = None,
+) -> list[dict]:
     k = 60
+    ctx = user_ctx or anonymous_context()
 
-    vector_results = vector_search(query, top_k=20)
-    bm25_results = bm25_search(query, top_k=20)
+    vector_results = vector_search(query, top_k=20, user_ctx=ctx)
+    bm25_results = bm25_search(query, top_k=20, user_ctx=ctx)
 
     rrf_scores = {}
 

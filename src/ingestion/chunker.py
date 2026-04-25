@@ -22,6 +22,8 @@ def chunk_documents(
     documents: list[dict],
     chunk_size: int = 512,
     chunk_overlap: int = 50,
+    tenant_id: str = "northwind-public",
+    classification: str = "public",
 ) -> list[Chunk]:
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -32,6 +34,8 @@ def chunk_documents(
 
     chunks = []
     for doc in documents:
+        doc_tenant = doc.get("tenant_id", tenant_id)
+        doc_classification = doc.get("classification", classification)
         for i, split in enumerate(splitter.split_text(doc["text"])):
             chunks.append(Chunk(
                 text=split.strip(),
@@ -39,6 +43,8 @@ def chunk_documents(
                     "source": doc["source"],
                     "chunk_id": f"{doc['source']}_{i}",
                     "chunk_index": i,
+                    "tenant_id": doc_tenant,
+                    "classification": doc_classification,
                 },
             ))
 
