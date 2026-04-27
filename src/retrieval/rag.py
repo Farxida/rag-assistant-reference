@@ -1,9 +1,12 @@
 import os
 import time
+import uuid
 from dotenv import load_dotenv
 from groq import Groq
 
+from src.audit.logger import log_query
 from src.auth.context import UserContext, anonymous_context
+from src.cache.response_cache import default_cache
 from src.ingestion.embedder import search as vector_search
 from src.retrieval.hybrid import hybrid_search
 from src.retrieval.reranker import rerank
@@ -58,6 +61,7 @@ class RAGPipeline:
         use_hybrid: bool = True,
         use_reranker: bool = True,
         use_pii_shield: bool = True,
+        cache=default_cache,
     ):
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
@@ -69,6 +73,7 @@ class RAGPipeline:
         self.use_hybrid = use_hybrid
         self.use_reranker = use_reranker
         self.use_pii_shield = use_pii_shield
+        self.cache = cache
 
     def query(
         self,
@@ -76,9 +81,24 @@ class RAGPipeline:
         user_ctx: UserContext | None = None,
         verbose: bool = False,
     ) -> dict:
+        t0 = time.time()
         ctx = user_ctx or anonymous_context()
+        response_id = uuid.uuid4().hex[:12]
         shield = PIIShield() if self.use_pii_shield else None
         retrieval_query = shield.mask(question) if shield else question
+        had_pii = bool(shield and shield.mapping)
+
+        if self.cache and not had_pii:
+            cached = self.cache.get(retrieval_query, ctx.tenant_id)
+            if cached is not None:
+                latency_ms = (time.time() - t0) * 1000
+                return {
+                    **cached,
+                    "question": question,
+                    "response_id": response_id,
+                    "latency_ms": latency_ms,
+                    "cache_hit": True,
+                }
 
         if self.use_hybrid:
             candidates = hybrid_search(retrieval_query, top_k=20, user_ctx=ctx)
@@ -102,15 +122,44 @@ class RAGPipeline:
         answer = shield.unmask(raw_answer) if shield else raw_answer
         suspicious = is_suspicious_output(answer)
         sources = list(set(r["source"] for r in results))
+        chunk_ids = [r.get("chunk_id") or r.get("source", "") for r in results]
+        latency_ms = (time.time() - t0) * 1000
+        pii_detected = shield.detected_entities() if shield else []
 
-        return {
+        log_query(
+            user_id=ctx.user_id,
+            masked_query=retrieval_query,
+            chunk_ids=chunk_ids,
+            response_id=response_id,
+            latency_ms=latency_ms,
+            pii_detected=pii_detected,
+            suspicious_output=suspicious,
+            tenant_id=ctx.tenant_id,
+        )
+
+        result = {
             "answer": answer,
             "sources": sources,
             "chunks": results,
             "question": question,
-            "pii_detected": shield.detected_entities() if shield else [],
+            "pii_detected": pii_detected,
             "suspicious_output": suspicious,
+            "response_id": response_id,
+            "latency_ms": latency_ms,
+            "cache_hit": False,
         }
+
+        if self.cache and not had_pii and not suspicious:
+            cached_payload = {
+                "answer": answer,
+                "sources": sources,
+                "chunks": results,
+                "pii_detected": pii_detected,
+                "suspicious_output": suspicious,
+            }
+            self.cache.set(retrieval_query, ctx.tenant_id, cached_payload)
+
+        return result
 
     def _generate(self, prompt: str, max_retries: int = 3) -> str:
         for attempt in range(max_retries):
