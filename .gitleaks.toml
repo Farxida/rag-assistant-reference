@@ -1,0 +1,30 @@
+title = "RAG Reference gitleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "groq-api-key"
+description = "Groq API key"
+regex = '''gsk_[A-Za-z0-9]{40,}'''
+tags = ["key", "groq"]
+
+[[rules]]
+id = "gemini-api-key"
+description = "Google AI Studio / Gemini API key"
+regex = '''AIza[0-9A-Za-z_-]{35}'''
+tags = ["key", "gemini", "google"]
+
+[[rules]]
+id = "anthropic-api-key"
+description = "Anthropic API key"
+regex = '''sk-ant-(?:api03|admin01)-[A-Za-z0-9_-]{93}'''
+tags = ["key", "anthropic", "claude"]
+
+[allowlist]
+description = "Allow doc, lock and example files"
+paths = [
+  '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket|lock|otf|ttf|woff|png|sample)$''',
+  '''(.*?)(/.env\.example)$''',
+  '''docs/[A-Z_]+\.md''',
+]

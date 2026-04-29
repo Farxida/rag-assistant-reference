@@ -1,10 +1,16 @@
 import time
 from fastapi import FastAPI, HTTPException, Request
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
+from src.privacy.data_subject import (
+    DISCLOSURE_TEXT,
+    delete_user_data,
+    export_user_data,
+)
 from src.retrieval.rag import RAGPipeline
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["100/day", "10/minute"])
@@ -17,6 +23,10 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+Instrumentator(
+    excluded_handlers=["/metrics", "/health"],
+).instrument(app).expose(app, include_in_schema=False)
 
 _rag: RAGPipeline | None = None
 
@@ -40,6 +50,21 @@ class ChatResponse(BaseModel):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.get("/disclosure")
+def disclosure():
+    return {"message": DISCLOSURE_TEXT}
+
+
+@app.get("/privacy/user/{user_id}/export")
+def export_user(user_id: str):
+    return export_user_data(user_id)
+
+
+@app.delete("/privacy/user/{user_id}")
+def delete_user(user_id: str):
+    return delete_user_data(user_id)
+
 
 @app.post("/chat", response_model=ChatResponse)
 @limiter.limit("10/minute")

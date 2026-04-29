@@ -15,7 +15,7 @@
 - **Ablation study**: vector-only vs hybrid vs hybrid+rerank — recall and latency trade-offs documented
 - **End-to-end runnable**: `python demo.py "your question"` works after a single ingestion command
 - **REST API** (FastAPI) + **CLI** entry points
-- **12 unit tests** passing in CI
+- Unit tests passing in CI
 
 ---
 
@@ -154,18 +154,15 @@ Builds the image, runs ingestion at build-time, and exposes the API on `:8000` w
 │   ├── eval/test_set.json           # 30-question test set with ground truths
 │   └── chroma_db/                   # built locally, gitignored
 ├── src/
-│   ├── ingestion/
-│   │   ├── chunker.py               # recursive markdown chunking
-│   │   ├── embedder.py              # ChromaDB + sentence-transformers
-│   │   └── build_knowledge_base.py  # full ingestion pipeline
-│   ├── retrieval/
-│   │   ├── hybrid.py                # BM25 + dense + RRF fusion
-│   │   ├── reranker.py              # cross-encoder reranking
-│   │   └── rag.py                   # full RAG: query → context → LLM
-│   ├── evaluation/
-│   │   └── evaluate.py              # retrieval / ablation / full eval modes
-│   └── api/
-│       └── main.py                  # FastAPI service
+│   ├── audit/                       # structured logging + PII canary
+│   ├── auth/                        # UserContext + classification ACLs
+│   ├── cache/                       # PII-aware response cache
+│   ├── ingestion/                   # chunker + ChromaDB embedder
+│   ├── privacy/                     # PII shield (Presidio + UK) + GDPR endpoints
+│   ├── retrieval/                   # hybrid + rerank + RAG pipeline
+│   ├── security/                    # prompt-injection defense
+│   ├── evaluation/                  # retrieval / ablation / full / adversarial / gate
+│   └── api/                         # FastAPI service (rate-limited, /metrics)
 ├── notebooks/
 │   └── 01_retrieval_walkthrough.ipynb  # walk-through of vector / BM25 / hybrid / rerank
 ├── tests/                           # 12 unit tests
