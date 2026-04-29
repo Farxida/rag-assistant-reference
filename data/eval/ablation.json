@@ -3,21 +3,24 @@
     "total": 30,
     "recall_at_5": 1.0,
     "correctness": 0.0,
-    "avg_retrieval_ms": 9.029070536295572,
+    "faithfulness": 0.0,
+    "avg_retrieval_ms": 8.128746350606283,
     "avg_total_ms": 0
   },
   "hybrid": {
     "total": 30,
     "recall_at_5": 0.9666666666666667,
     "correctness": 0.0,
-    "avg_retrieval_ms": 7.421724001566569,
+    "faithfulness": 0.0,
+    "avg_retrieval_ms": 7.311789194742839,
     "avg_total_ms": 0
   },
   "hybrid+rerank": {
     "total": 30,
     "recall_at_5": 0.9666666666666667,
     "correctness": 0.0,
-    "avg_retrieval_ms": 309.930960337321,
+    "faithfulness": 0.0,
+    "avg_retrieval_ms": 313.8426701227824,
     "avg_total_ms": 0
   }
 }

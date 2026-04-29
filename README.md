@@ -10,7 +10,7 @@
 
 ## Highlights
 
-- **Real measured evaluation**: 30-question test set, **Recall@5 = 96.7%**, **Correctness = 93.3%** (LLM-as-judge), avg total latency **1.1 s**
+- **Real measured evaluation**: 30-question test set, **Recall@5 = 96.7%**, **Correctness = 93.7%**, **Faithfulness = 98.3%** (LLM-as-judge), avg total latency **1.9 s**
 - **Production architecture**: hybrid retrieval (BM25 + dense) → cross-encoder rerank → calibrated generation
 - **Ablation study**: vector-only vs hybrid vs hybrid+rerank — recall and latency trade-offs documented
 - **End-to-end runnable**: `python demo.py "your question"` works after a single ingestion command
@@ -86,6 +86,7 @@ flowchart TB
 **Metrics:**
 - **Recall@5** — does the expected source document appear in the top-5 retrieved chunks?
 - **Correctness** (0.0–1.0) — Llama 3.3 70B judges each generated answer against the ground truth on a fixed rubric.
+- **Faithfulness** (0.0–1.0) — same judge checks every claim is supported by the retrieved context (no hallucinations).
 - **Latency** — end-to-end time from question to answer (retrieval + generation).
 
 The full pipeline including the LLM judge is reproducible: `python -m src.evaluation.evaluate full`. Test set is committed at `data/eval/test_set.json`. Reports are written to `data/eval/report.json`.
@@ -96,9 +97,9 @@ The full pipeline including the LLM judge is reproducible: `python -m src.evalua
 
 | Configuration | Recall@5 | Avg retrieval | Notes |
 |---|---:|---:|---|
-| Vector only (dense embeddings) | **100.0%** | 9 ms | Sufficient on this clean small corpus |
+| Vector only (dense embeddings) | **100.0%** | 8 ms | Sufficient on this clean small corpus |
 | + BM25 hybrid (RRF fusion) | 96.7% | 7 ms | Adds keyword precision; slightly noisier on small N |
-| + Cross-encoder reranker | 96.7% | 310 ms | Reorders for relevance; pays in latency |
+| + Cross-encoder reranker | 96.7% | 314 ms | Reorders for relevance; pays in latency |
 
 **Honest finding:** on a 100-chunk well-curated corpus, dense vector search alone is sufficient. Hybrid and reranking show their value on larger, noisier production corpora where keyword matching catches what semantic search misses (e.g., exact product names, error codes, version numbers). The reference architecture keeps the full stack because that was the production configuration; for this synthetic eval it's a documented trade-off.
 

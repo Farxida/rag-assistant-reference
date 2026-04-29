@@ -1,0 +1,602 @@
+{
+  "metrics": {
+    "total": 30,
+    "recall_at_5": 0.9666666666666667,
+    "correctness": 0.0,
+    "faithfulness": 0.0,
+    "avg_retrieval_ms": 306.3952525456746,
+    "avg_total_ms": 0
+  },
+  "details": [
+    {
+      "question_id": 1,
+      "question": "How much does the Business plan cost per month?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "regions_and_sla.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "",
+      "ground_truth": "299",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 6940.292119979858,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 2,
+      "question": "What is the discount for annual billing?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "pricing.md",
+        "billing.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "",
+      "ground_truth": "20%",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 93.5828685760498,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 3,
+      "question": "How many users are included in the Free plan?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "limits_and_quotas.md",
+        "getting_started.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "",
+      "ground_truth": "3",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 74.5992660522461,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 4,
+      "question": "Is there a free trial available?",
+      "category": "pricing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "pricing.md",
+        "getting_started.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "pricing.md",
+      "answer": "",
+      "ground_truth": "yes, 14-day free trial",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 86.35592460632324,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 5,
+      "question": "Which compliance certifications does Northwind have?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "features.md",
+        "regions_and_sla.md",
+        "onboarding.md",
+        "policies.md",
+        "security.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "",
+      "ground_truth": "SOC 2 Type II, ISO 27001, HIPAA, GDPR, CCPA",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 76.18165016174316,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 6,
+      "question": "Can I bring my own encryption key?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "api_reference.md",
+        "policies.md",
+        "security.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "",
+      "ground_truth": "yes, on Enterprise plan via AWS KMS, GCP Cloud KMS, or Azure Key Vault",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 76.64203643798828,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 7,
+      "question": "What TLS version is enforced?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "integrations.md",
+        "features.md",
+        "policies.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "",
+      "ground_truth": "TLS 1.3",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 83.43315124511719,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 8,
+      "question": "Where can I report security vulnerabilities?",
+      "category": "security",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "security.md"
+      ],
+      "expected_source": "security.md",
+      "answer": "",
+      "ground_truth": "security@northwind.cloud or HackerOne bug bounty",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 87.23115921020508,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 9,
+      "question": "How do I create a workspace?",
+      "category": "getting_started",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "getting_started.md",
+        "regions_and_sla.md",
+        "onboarding.md",
+        "features.md"
+      ],
+      "expected_source": "getting_started.md",
+      "answer": "",
+      "ground_truth": "sign up at app.northwind.cloud, verify email, choose name and region",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 59.407711029052734,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 10,
+      "question": "How long does an initial sync usually take?",
+      "category": "technical",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "getting_started.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "faq.md",
+      "answer": "",
+      "ground_truth": "2 to 4 hours for 100 GB warehouse",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 88.00005912780762,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 11,
+      "question": "What is the API rate limit on the Business plan?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "limits_and_quotas.md",
+        "api_reference.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "",
+      "ground_truth": "600 requests per minute",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 92.4229621887207,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 12,
+      "question": "How do I authenticate API requests?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "api_reference.md",
+        "limits_and_quotas.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "",
+      "ground_truth": "Bearer token in Authorization header, API key from Settings",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 80.31177520751953,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 13,
+      "question": "What is the API base URL?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "security.md",
+        "api_reference.md",
+        "limits_and_quotas.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "",
+      "ground_truth": "https://api.northwind.cloud/v1",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 83.37116241455078,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 14,
+      "question": "Which Python SDK does Northwind provide?",
+      "category": "api",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "api_reference.md",
+        "integrations.md",
+        "features.md"
+      ],
+      "expected_source": "api_reference.md",
+      "answer": "",
+      "ground_truth": "pip install northwind-cloud",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 74.02873039245605,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 15,
+      "question": "Does Northwind support Snowflake?",
+      "category": "integrations",
+      "source_recall": 0.0,
+      "retrieved_sources": [
+        "migration_guide.md",
+        "features.md",
+        "faq.md",
+        "troubleshooting.md",
+        "getting_started.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "",
+      "ground_truth": "yes, native connector available",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 98.45972061157227,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 16,
+      "question": "Which CRMs are supported?",
+      "category": "integrations",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "getting_started.md",
+        "integrations.md",
+        "features.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "",
+      "ground_truth": "Salesforce, HubSpot, Pipedrive, Zoho",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 69.86689567565918,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 17,
+      "question": "Can I send dashboard reports to Slack?",
+      "category": "integrations",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "integrations.md",
+        "features.md",
+        "onboarding.md",
+        "troubleshooting.md",
+        "getting_started.md"
+      ],
+      "expected_source": "integrations.md",
+      "answer": "",
+      "ground_truth": "yes, scheduled reports and alerts to Slack",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 69.95391845703125,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 18,
+      "question": "What payment methods do you accept?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "pricing.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "",
+      "ground_truth": "credit card, ACH (US), SEPA (EU), wire transfer (Enterprise), purchase orders (Enterprise)",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 69.75913047790527,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 19,
+      "question": "Do you accept cryptocurrency?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "security.md",
+        "policies.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "",
+      "ground_truth": "no",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 69.69594955444336,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 20,
+      "question": "What happens if my payment fails?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "troubleshooting.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "",
+      "ground_truth": "retried on day 3, 5, 7; suspended after 3 failed retries; archived after 14 days",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 77.96406745910645,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 21,
+      "question": "Can I get a refund on annual plans?",
+      "category": "billing",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "pricing.md",
+        "billing.md"
+      ],
+      "expected_source": "billing.md",
+      "answer": "",
+      "ground_truth": "pro-rated refund within first 30 days only",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 78.75394821166992,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 22,
+      "question": "Why am I getting a connection timeout error?",
+      "category": "troubleshooting",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "getting_started.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "troubleshooting.md",
+      "answer": "",
+      "ground_truth": "check Northwind IP ranges in firewall, database accepts external connections",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 74.40185546875,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 23,
+      "question": "How can I make a slow dashboard faster?",
+      "category": "troubleshooting",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "getting_started.md",
+        "migration_guide.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "troubleshooting.md",
+      "answer": "",
+      "ground_truth": "enable Auto-cache, replace SELECT * with explicit columns, check Performance tab",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 71.51126861572266,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 24,
+      "question": "What is the uptime SLA on Enterprise?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "pricing.md",
+        "regions_and_sla.md",
+        "onboarding.md",
+        "policies.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "",
+      "ground_truth": "99.95%",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 85.05010604858398,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 25,
+      "question": "Which regions does Northwind support?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "regions_and_sla.md",
+        "integrations.md",
+        "migration_guide.md",
+        "features.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "",
+      "ground_truth": "us-east-1, us-west-2, eu-west-1, eu-central-1, ap-southeast-1",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 71.06399536132812,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 26,
+      "question": "Can I move my workspace to a different region?",
+      "category": "sla",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "getting_started.md",
+        "regions_and_sla.md",
+        "security.md"
+      ],
+      "expected_source": "regions_and_sla.md",
+      "answer": "",
+      "ground_truth": "no, region cannot be changed after creation",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 72.85809516906738,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 27,
+      "question": "Do you train AI models on customer data?",
+      "category": "policy",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "features.md",
+        "policies.md",
+        "security.md"
+      ],
+      "expected_source": "policies.md",
+      "answer": "",
+      "ground_truth": "no, customer data is never used to train shared models",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 55.26900291442871,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 28,
+      "question": "How long are audit logs retained?",
+      "category": "policy",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "limits_and_quotas.md",
+        "onboarding.md",
+        "policies.md",
+        "pricing.md",
+        "troubleshooting.md"
+      ],
+      "expected_source": "policies.md",
+      "answer": "",
+      "ground_truth": "12 months on Business, 7 years on Enterprise",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 71.94018363952637,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 29,
+      "question": "Can I import dashboards from Tableau?",
+      "category": "migration",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "migration_guide.md"
+      ],
+      "expected_source": "migration_guide.md",
+      "answer": "",
+      "ground_truth": "yes, via nw-tableau-importer CLI for .twbx files",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 70.39594650268555,
+      "total_time_ms": 0.0
+    },
+    {
+      "question_id": 30,
+      "question": "What is the maximum file upload size on Business plan?",
+      "category": "limits",
+      "source_recall": 1.0,
+      "retrieved_sources": [
+        "faq.md",
+        "getting_started.md",
+        "regions_and_sla.md",
+        "limits_and_quotas.md"
+      ],
+      "expected_source": "limits_and_quotas.md",
+      "answer": "",
+      "ground_truth": "10 GB",
+      "correctness": 0.0,
+      "faithfulness": 0.0,
+      "context": "",
+      "retrieval_time_ms": 89.05291557312012,
+      "total_time_ms": 0.0
+    }
+  ]
+}
