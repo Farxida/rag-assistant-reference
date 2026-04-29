@@ -33,31 +33,25 @@ Per-category breakdown across 12 question types:
 
 ```mermaid
 flowchart TB
-    subgraph ingest["📥 Ingestion (offline)"]
-        A1[Markdown documents] --> A2["RecursiveCharacter<br/>chunker (512/50)"]
-        A2 --> A3["all-MiniLM-L6-v2<br/>(384-dim embeddings)"]
-        A3 --> A4[(ChromaDB<br/>cosine similarity)]
+    subgraph ingest["Ingestion (offline)"]
+        A1[Markdown docs] --> A2["Chunker<br/>512 / 50 overlap"]
+        A2 --> A3["MiniLM-L6-v2<br/>384-dim"]
+        A3 --> A4[(ChromaDB)]
     end
 
-    subgraph query["🔍 Query (online)"]
-        B1[User question] --> B2{Hybrid retrieval}
-        B2 --> B3["Dense vector<br/>top-20"]
-        B2 --> B4["BM25<br/>top-20"]
-        B3 --> B5[RRF fusion<br/>k=60]
+    subgraph query["Query pipeline"]
+        B1[Question] --> B2{Hybrid retrieval}
+        B2 --> B3[Dense top-20]
+        B2 --> B4[BM25 top-20]
+        B3 --> B5[RRF fusion]
         B4 --> B5
-        B5 --> B6["Cross-encoder rerank<br/>ms-marco-MiniLM-L-6-v2"]
-        B6 --> B7["Top-5 chunks"]
-        B7 --> B8["Llama 3.3 70B<br/>via Groq"]
+        B5 --> B6[Cross-encoder rerank]
+        B6 --> B7[Top-5 chunks]
+        B7 --> B8[Llama 3.3 70B]
         B8 --> B9[Answer + sources]
     end
 
     A4 -.-> B3
-
-    subgraph eval["📊 Evaluation"]
-        C1[30 Q&A test set] --> C2[Retrieval eval<br/>Recall@5]
-        C1 --> C3[Generation eval]
-        C3 --> C4[LLM-as-judge<br/>correctness 0.0–1.0]
-    end
 ```
 
 ---
@@ -79,29 +73,29 @@ flowchart TB
 
 ---
 
-## Evaluation Methodology
+## Evaluation
 
-**Test set:** 30 questions across 12 categories (`api`, `billing`, `pricing`, `security`, `sla`, `integrations`, `migration`, `policy`, `getting_started`, `limits`, `technical`, `troubleshooting`). Each question has a ground-truth answer and an expected source document.
+**Test set** — 30 questions across 12 categories with ground-truth answers and expected sources.
 
-**Metrics:**
-- **Recall@5** — does the expected source document appear in the top-5 retrieved chunks?
-- **Correctness** (0.0–1.0) — Llama 3.3 70B judges each generated answer against the ground truth on a fixed rubric.
-- **Faithfulness** (0.0–1.0) — same judge checks every claim is supported by the retrieved context (no hallucinations).
-- **Latency** — end-to-end time from question to answer (retrieval + generation).
+**Metrics**
+- **Recall@5** — expected source in top-5 retrieved chunks
+- **Correctness** (0–1) — LLM-as-judge against ground truth
+- **Faithfulness** (0–1) — every claim supported by retrieved context
+- **Latency** — end-to-end question → answer
 
-The full pipeline including the LLM judge is reproducible: `python -m src.evaluation.evaluate full`. Test set is committed at `data/eval/test_set.json`. Reports are written to `data/eval/report.json`.
+Reproducible: `python -m src.evaluation.evaluate full` · test set: `data/eval/test_set.json`.
 
-### Ablation: how much does each component contribute?
+### Ablation
 
 ![Ablation](assets/ablation.png)
 
-| Configuration | Recall@5 | Avg retrieval | Notes |
-|---|---:|---:|---|
-| Vector only (dense embeddings) | **100.0%** | 8 ms | Sufficient on this clean small corpus |
-| + BM25 hybrid (RRF fusion) | 96.7% | 7 ms | Adds keyword precision; slightly noisier on small N |
-| + Cross-encoder reranker | 96.7% | 314 ms | Reorders for relevance; pays in latency |
+| Configuration | Recall@5 | Latency |
+|---|---:|---:|
+| Vector only | **100.0%** | 8 ms |
+| + BM25 hybrid (RRF) | 96.7% | 7 ms |
+| + Cross-encoder rerank | 96.7% | 314 ms |
 
-**Honest finding:** on a 100-chunk well-curated corpus, dense vector search alone is sufficient. Hybrid and reranking show their value on larger, noisier production corpora where keyword matching catches what semantic search misses (e.g., exact product names, error codes, version numbers). The reference architecture keeps the full stack because that was the production configuration; for this synthetic eval it's a documented trade-off.
+On a clean 100-chunk corpus dense search alone is enough. Hybrid + rerank pay off on larger, noisier production corpora — exact product names, error codes, versions — so the full stack is kept as production reference.
 
 ---
 
