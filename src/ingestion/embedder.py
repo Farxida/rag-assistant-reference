@@ -22,8 +22,8 @@ def create_collection(chunks: list[Chunk], reset: bool = False) -> chromadb.Coll
         try:
             client.delete_collection(COLLECTION_NAME)
             print(f"Deleted existing collection '{COLLECTION_NAME}'")
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"No existing collection to delete: {e}")
 
     collection = client.get_or_create_collection(
         name=COLLECTION_NAME,
