@@ -35,3 +35,13 @@ src/
 - **Storage**: ChromaDB on encrypted EBS.
 - **Observability**: Prometheus `/metrics` (`prometheus-fastapi-instrumentator`), CloudWatch for logs.
 - **CI/CD**: pytest + `gitleaks` + `bandit` + `pip-audit` per PR; eval `gate` mode blocks merges on `>5pp` correctness drop.
+
+## v2: Agentic layer (LangGraph)
+
+The linear RAG pipeline above is kept as the baseline (`/chat`). v2 adds an
+explicit LangGraph StateGraph on top (`/agent/chat`): deterministic input/output
+guard nodes, a structured-output intent router (product / complaint / chitchat /
+offtopic), a ReAct loop over `search_knowledge` with CRAG self-correction
+inside, a groundedness judge with strict regeneration, and a calibrated
+semantic cache. Escalations and refusals are graph branches, not LLM decisions.
+See `src/agent/graph.py` — the module docstring contains the full diagram.

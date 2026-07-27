@@ -10,6 +10,7 @@
 
 ## Highlights
 
+- **Agentic layer (v2)**: explicit LangGraph StateGraph — input/output guardrails as graph nodes, structured-output router, CRAG self-corrective retrieval, runtime groundedness check (Self-RAG lite), semantic cache
 - **Real measured evaluation**: 30-question test set, **Recall@5 = 96.7%**, **Correctness = 93.7%**, **Faithfulness = 98.3%** (LLM-as-judge), avg total latency **1.9 s**
 - **Production architecture**: hybrid retrieval (BM25 + dense) → cross-encoder rerank → calibrated generation
 - **Ablation study**: vector-only vs hybrid vs hybrid+rerank — recall and latency trade-offs documented
@@ -54,6 +55,54 @@ flowchart TB
     A4 -.-> B3
 ```
 
+
+### Agentic layer (v2) — explicit LangGraph StateGraph
+
+```
+START
+  |
+guard_input --(injection / PII / empty)--> refuse --> END        <- deterministic, no LLM
+  | ok
+classify  <- structured output (Pydantic): intent + confidence
+  |
+  |-- chitchat  --> template reply --> END                       <- no LLM
+  |-- offtopic  --> polite refusal --> END                       <- no LLM
+  |-- complaint --> escalate to human --> END                    <- no LLM
+  |-- product question
+        |
+      agent <-> tools        <- ReAct loop: search_knowledge (CRAG inside)
+        |
+      guard_output --(violations)--> repair (structured output) --> END
+        | clean
+      check_grounded --(unsupported facts)--> strict_regen --> END   <- Self-RAG lite
+        | grounded
+       END
+```
+
+Design principles (each is a deliberate trade-off, not an accident):
+
+- **Guardrails are graph nodes, not prompt text** — prompt injection and PII are
+  screened by deterministic functions *before* the first LLM call and cannot be
+  bypassed by prompting; output guards catch discount offers, unbacked SLA
+  promises and leaked tool-call markup.
+- **Escalation and refusals are deterministic branches** — no LLM call, no
+  hallucination risk, near-zero latency on these paths.
+- **Structured outputs everywhere** (Pydantic): intent router, CRAG context
+  grader, answer repair, groundedness verdict.
+- **CRAG** (Yan et al., 2024): retrieved top-3 is graded by a small LLM; weak
+  context triggers a query rewrite and a second retrieval pass. Fails open.
+- **Groundedness check** (Self-RAG lite): a judge verifies the final answer
+  against retrieved context; unsupported answers are regenerated in strict
+  "context-only" mode.
+- **Semantic cache**: paraphrases of typical questions are served from an
+  embedding cache (threshold 0.88, calibrated on paraphrase vs
+  different-question similarity data); only clean, non-escalated answers are
+  ever cached.
+- **Dialogue memory** per `session_id` via LangGraph checkpointer.
+
+Endpoints: `POST /agent/chat` (agentic, with memory and cache),
+`POST /chat` (linear RAG baseline kept for comparison), `GET /agent/cache/stats`.
+
 ---
 
 ## Stack
@@ -66,7 +115,7 @@ flowchart TB
 | **Lexical retrieval** | BM25 (`rank-bm25`) |
 | **Reranker** | `cross-encoder/ms-marco-MiniLM-L-6-v2` |
 | **Chunking** | `langchain-text-splitters` RecursiveCharacterTextSplitter |
-| **Agent** | [LangGraph](https://langchain-ai.github.io/langgraph/) (graph + tools — backend) |
+| **Agent** | [LangGraph](https://langchain-ai.github.io/langgraph/) explicit StateGraph: guard nodes, structured-output router, CRAG, groundedness check, semantic cache |
 | **API** | FastAPI + Uvicorn |
 | **Eval** | Custom retrieval + LLM-as-judge pipeline |
 | **Testing** | pytest |
@@ -99,6 +148,26 @@ On a clean 100-chunk corpus dense search alone is enough. Hybrid + rerank pay of
 
 ---
 
+
+## Testing (a pyramid for LLM systems)
+
+```bash
+pytest                       # fast suite, no LLM calls, no network
+```
+
+| Level | What | Why |
+|---|---|---|
+| Unit | guards, chunker, caches, RBAC — pure functions | logic regressions |
+| Red-team | parametrized prompt-injection + PII attacks | security is tested, not assumed |
+| Structure | graph nodes/edges: every request provably enters `guard_input` first | architecture contracts |
+| Mocked | semantic cache with injected toy embedder; CRAG grading paths | expensive branches, deterministically |
+| Contract | FastAPI schemas, validation, rate limits | client-facing API stability |
+| Offline eval | retrieval metrics + LLM-as-judge on the golden set | quality drift between releases |
+
+LLM-calling tests and judge-based evaluation are run on a schedule, not on every
+commit — they cost tokens and hit rate limits; the fast suite stays free and instant.
+
+---
 ## Quick Start
 
 ```bash
@@ -154,13 +223,14 @@ Builds the image, runs ingestion at build-time, and exposes the API on `:8000` w
 │   ├── cache/                       # PII-aware response cache
 │   ├── ingestion/                   # chunker + ChromaDB embedder
 │   ├── privacy/                     # PII shield (Presidio + UK) + GDPR endpoints
-│   ├── retrieval/                   # hybrid + rerank + RAG pipeline
+│   ├── agent/                       # LangGraph StateGraph, guards, structured outputs
+│   ├── retrieval/                   # hybrid + rerank + corrective (CRAG) + RAG pipeline
 │   ├── security/                    # prompt-injection defense
 │   ├── evaluation/                  # retrieval / ablation / full / adversarial / gate
 │   └── api/                         # FastAPI service (rate-limited, /metrics)
 ├── notebooks/
 │   └── 01_retrieval_walkthrough.ipynb  # walk-through of vector / BM25 / hybrid / rerank
-├── tests/                           # 12 unit tests
+├── tests/                           # 100+ tests: unit, red-team, graph structure, contract
 └── assets/                          # generated charts for this README
 ```
 
