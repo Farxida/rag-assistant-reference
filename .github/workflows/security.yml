@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install pip-audit
+      # PYSEC-2026-311 (chromadb 1.5.9): no fixed release available yet;
+      # remove the ignore once chromadb ships a patched version
       - name: Audit dependencies
-        run: # PYSEC-2026-311 (chromadb 1.5.9): no fixed release available yet;
-        # remove the ignore once chromadb ships a patched version
-        pip-audit --requirement requirements.txt --strict --ignore-vuln PYSEC-2026-311
+        run: pip-audit --requirement requirements.txt --strict --ignore-vuln PYSEC-2026-311
